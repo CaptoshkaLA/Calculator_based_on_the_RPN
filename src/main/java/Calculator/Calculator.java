@@ -1,7 +1,6 @@
 package Calculator;
 
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -56,7 +55,7 @@ public class Calculator {
      * Function for calculating postfix version of expression
      * @param exitText
      * @return result of the expression
-     * @throws EmptyStackException
+     * @throws /EmptyStackException, ArithmeticException
      */
     public double calculate(String exitText) throws Exception {
         Stack<Double>stack=new Stack<>();
