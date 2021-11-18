@@ -1,7 +1,7 @@
 
 # Calculator
  #### This library stores the implementation of a simple calculator based on the Reverse Polish Notation.
- #### The expression is translated from the infix record to the postfix record and calculated.
+ #### The expression is translated from the infix to the postfix record and calculated.
  #### All negative numbers must be entered in brackets.
  #### Input examples: `(-1)^0-5`, `(-3)*(-7)*5`, `-3+(-5)*(6-7)`.
 
@@ -14,8 +14,8 @@
 `priority(Operator)` returns operators priority
  #### Brackets
 `checkBrackets(Expression)` checks the correct placement of brackets
- #### Add zeros(auxiliary function)
- `addZeros(Expression)` adds zeros to the unzry cons in the expression
+ #### Changing the unary cons(auxiliary function)
+ `addZeros(Expression)` adds zeros to the unary cons in the expression
  
  # Exceptions 
  #### EmptyStackException
