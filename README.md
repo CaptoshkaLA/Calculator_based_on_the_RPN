@@ -2,7 +2,7 @@
 # Calculator
  #### This library stores the implementation of a simple calculator based on the Reverse Polish Notation.
  #### The expression is translated from the infix record to the postfix record and calculated.
- #### All negative numbers must be entered in btackets.
+ #### All negative numbers must be entered in brackets.
  #### Input examples: `(-1)^0-5`, `(-3)*(-7)*5`, `-3+(-5)*(6-7)`.
 
  # Functions
