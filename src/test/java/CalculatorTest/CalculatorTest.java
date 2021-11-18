@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class CalculatorTest {
 
     @Test
-    void toPostfix() throws Exception {
+    void toPostfix(){
         Calculator calc = new Calculator();
         assertEquals(calc.toPostfix("1+2/2"),"1 2 2 / + ");
         assertEquals(calc.toPostfix("1^3+5*(-1)"),"1 3 ^ 5 0 1 - * + ");
-
+        assertEquals(calc.toPostfix("5^0-1"), "5 0 ^ 1 - ");
     }
 
     @Test

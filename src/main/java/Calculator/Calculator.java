@@ -13,14 +13,14 @@ public class Calculator {
     /**
      * A function for transforming infix into
      * a postfix version and replacing the unary operator(-)
-     * @param /expression
+     * @param expression
      * @return transformed expression
      */
-    public String toPostfix(String text){
-        String enterText=replaceNegative(text);
-        StringBuilder exitText= new StringBuilder();
-        Stack<String> stack=new Stack<>();
-        StringTokenizer stringTokenizer=new StringTokenizer(enterText,"+-*^/()",true);
+    public String toPostfix(String expression){
+        String enterExpression = addZeros(expression);
+        StringBuilder exitExpression = new StringBuilder();
+        Stack<String> stack = new Stack<>();
+        StringTokenizer stringTokenizer = new StringTokenizer(enterExpression,"+-*^/()",true);
         while (stringTokenizer.hasMoreTokens()){
             String element=stringTokenizer.nextToken();
             switch (element) {
@@ -29,8 +29,8 @@ public class Calculator {
                 case "-":
                 case "^":
                 case "/":
-                    while (!stack.empty() && getPriority(stack.peek()) >= getPriority(element))
-                        exitText.append(stack.pop()).append(" ");
+                    while (!stack.empty() && priority(stack.peek()) >= priority(element))
+                        exitExpression.append(stack.pop()).append(" ");
 
                     stack.push(element);
                     break;
@@ -39,27 +39,27 @@ public class Calculator {
                     break;
                 case ")":
 
-                    while (!stack.peek().equals("(")) exitText.append(stack.pop()).append(" ");
+                    while (!stack.peek().equals("(")) exitExpression.append(stack.pop()).append(" ");
                     stack.pop();
                     break;
                 default:
-                    exitText.append(element).append(" ");
+                    exitExpression.append(element).append(" ");
                     break;
             }
         }
-        while(!stack.empty()) exitText.append(stack.pop()).append(" ");
-        return exitText.toString();
+        while(!stack.empty()) exitExpression.append(stack.pop()).append(" ");
+        return exitExpression.toString();
     }
 
     /**
      * Function for calculating postfix version of expression
-     * @param exitText
+     * @param expression
      * @return result of the expression
      * @throws /EmptyStackException, ArithmeticException
      */
-    public double calculate(String exitText) throws Exception {
-        Stack<Double>stack=new Stack<>();
-        StringTokenizer stringTokenizer=new StringTokenizer(exitText," ");
+    public double calculate(String expression) throws Exception {
+        Stack<Double>stack = new Stack<>();
+        StringTokenizer stringTokenizer = new StringTokenizer(expression," ");
         while(stringTokenizer.hasMoreTokens()) {
             String element = stringTokenizer.nextToken();
             if (!element.equals("+") && !element.equals("*") && !element.equals("-") && !element.equals("/") && !element.equals("^")) {
@@ -67,28 +67,28 @@ public class Calculator {
                 stack.push(value);
             }
             else {
-                double valueOne = stack.pop();
-                double valueTwo = stack.pop();
+                double rightValue = stack.pop();
+                double leftValue = stack.pop();
                 switch(element.charAt(0)) {
                     case '*': {
-                        stack.push(valueTwo * valueOne);
+                        stack.push(leftValue * rightValue);
                         break;
                     }
                     case '+': {
-                        stack.push(valueTwo + valueOne);
+                        stack.push(leftValue + rightValue);
                         break;
                     }
                     case '-': {
-                        stack.push(valueTwo - valueOne);
+                        stack.push(leftValue - rightValue);
                         break;
                     }
                     case '/': {
-                        if(valueOne == 0) throw new ArithmeticException("Division by zero");
-                        stack.push(valueTwo / valueOne);
+                        if(rightValue == 0) throw new ArithmeticException("Division by zero");
+                        stack.push(leftValue / rightValue);
                         break;
                     }
                     case '^': {
-                        stack.push(Math.pow(valueTwo,valueOne));
+                        stack.push(Math.pow(leftValue,rightValue));
                         break;
                     }
                 }
@@ -102,7 +102,7 @@ public class Calculator {
      * @param operator
      * @return priority
      */
-    private int getPriority(String operator) {
+    private int priority(String operator) {
 
         if(operator.equals("+") || operator.equals("-")) return 1;
         else if(operator.equals("*") || operator.equals("/")) return 2;
@@ -112,49 +112,49 @@ public class Calculator {
 
     /**
      * Checking a correct placement of brackets
-     * @param /text
+     * @param expression
      * @return 1|0
      */
-    public boolean checkBrackets(String enterText){
-        Stack<String> stackForBrackets = new Stack<>();
-        StringTokenizer st = new StringTokenizer(enterText, "()",true);
-        while(st.hasMoreTokens()) {
-            String elementInBracket = st.nextToken();
-            if(elementInBracket.equals("(")) stackForBrackets.push(elementInBracket);
+    public boolean checkBrackets(String expression){
+        Stack<String> stack = new Stack<>();
+        StringTokenizer stringTokenizer = new StringTokenizer(expression, "()",true);
+        while(stringTokenizer.hasMoreTokens()) {
+            String elementInBracket = stringTokenizer.nextToken();
+            if(elementInBracket.equals("(")) stack.push(elementInBracket);
 
             if(elementInBracket.equals(")")) {
-                if (stackForBrackets.isEmpty()) return false;
-                if (!stackForBrackets.pop().equals("(")) return false;
+                if (stack.isEmpty()) return false;
+                if (!stack.pop().equals("(")) return false;
             }
         }
-        return stackForBrackets.isEmpty();
+        return stack.isEmpty();
     }
 
     /**
      * Function for changing text with negative numbers
-     * @param text
+     * @param expression
      * @return
      */
-    private String replaceNegative(String text){
-        StringBuilder stringBuilder=new StringBuilder(text);
-        ArrayList<Integer> list=new ArrayList<>();
-        StringTokenizer stringTokenizer=new StringTokenizer(text,"-(",true);
+    private String addZeros(String expression){
+        StringBuilder stringBuilder = new StringBuilder(expression);
+        ArrayList<Integer> IndexList = new ArrayList<>();
+        StringTokenizer stringTokenizer = new StringTokenizer(expression,"-(",true);
         int fromIndex=0;
         while(stringTokenizer.hasMoreTokens()){
-            String element=stringTokenizer.nextToken();
-            if(element.equals("(")){
+            String element = stringTokenizer.nextToken();
+            if(element.equals("(")) {
                 if((stringTokenizer.nextToken()).equals("-")){
-                    int index=text.indexOf('(',fromIndex);
-                    fromIndex=index+1;
-                    list.add(index);
+                    int index = expression.indexOf('(',fromIndex);
+                    fromIndex = index + 1;
+                    IndexList.add(index);
                 }
                 else{
-                    fromIndex=text.indexOf("(",fromIndex)+1;
+                    fromIndex = expression.indexOf("(",fromIndex) + 1;
                 }
             }
         }
-        int counter=1;
-        for(Integer indexOfBracket:list){
+        int counter = 1;
+        for(Integer indexOfBracket:IndexList){
             stringBuilder.insert(indexOfBracket+counter,'0');
             counter++;
 
